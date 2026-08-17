@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "name": "quietdrop",
+  "component_type": "service",
+  "version": "0.1.0",
+  "entrypoint": "quietdrop",
+  "interfaces": ["cli", "http"],
+  "capabilities": ["file-intake", "staging", "watch-folders", "archive"],
+  "lifecycle": "on-demand",
+  "health": {},
+  "dependencies": [],
+  "source_repository": "5K-bit/QuietDrop"
+}
