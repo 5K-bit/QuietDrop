@@ -11,6 +11,7 @@ from fastapi.templating import Jinja2Templates
 
 from .. import paths
 from ..actions import archive, mark_reviewed, reject, rename
+from ..file_operations import pending_operations, recover_operations
 from ..config import Config, load as load_config
 from ..db import Item, connect, get_item, list_items
 from ..scanner import scan_once
@@ -63,6 +64,31 @@ def create_app(*, start_watcher: bool = False) -> FastAPI:
     app = FastAPI(title="QuietDrop")
     templates = Jinja2Templates(directory=str(_templates_dir()))
 
+    @app.exception_handler(FileExistsError)
+    async def collision(request, exc):
+        return JSONResponse({"detail": str(exc), "code": "destination_exists"}, status_code=409)
+
+    @app.exception_handler(FileNotFoundError)
+    async def missing_file(request, exc):
+        return JSONResponse({"detail": "Source file is missing; the item was not archived", "code": "source_missing"}, status_code=409)
+
+    @app.exception_handler(ValueError)
+    async def invalid_operation(request, exc):
+        return JSONResponse({"detail": str(exc), "code": "invalid_operation"}, status_code=422)
+
+    @app.exception_handler(KeyError)
+    async def missing_item(request, exc):
+        return JSONResponse({"detail": "Item not found"}, status_code=404)
+
+    @app.get("/api/operations")
+    def operations(con=Depends(_get_con)):
+        return pending_operations(con)
+
+    @app.post("/api/operations/recover")
+    def recover(con=Depends(_get_con)):
+        return {"pending": recover_operations(con), "message": "Only committed moves with matching file contents are completed"}
+
+
     app.mount("/static", StaticFiles(directory=str(_static_dir())), name="static")
 
     if start_watcher:
@@ -82,6 +108,7 @@ def create_app(*, start_watcher: bool = False) -> FastAPI:
         @app.on_event("shutdown")
         def _shutdown():  # noqa: ANN202
             stop.set()
+            t.join(timeout=3)
 
     @app.get("/", response_class=HTMLResponse)
     def index(request: Request, status: str | None = None, con=Depends(_get_con), cfg=Depends(_get_cfg)):
