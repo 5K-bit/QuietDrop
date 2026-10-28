@@ -93,3 +93,7 @@ settle_seconds = 2.0
 - `quietdrop reject <id>`
 - `quietdrop rename <id> <new_name>`
 - `quietdrop tag <id> <tag...>`
+
+## Terminal identity
+
+`quietdrop --version` prints the installed version (source version when running an uninstalled checkout). Help identifies QuietDrop as a Blackfong project. Interactive commands display a compact product banner on stderr; automatic banners are suppressed when either output stream is redirected. Use `--no-banner` to suppress it or `--banner` before a subcommand to request it explicitly. `NO_COLOR` and `TERM=dumb` disable banner colors. Command output, exit codes, and operational status labels retain their meaning.
