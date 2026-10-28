@@ -1,4 +1,23 @@
+<div align="center">
+
+<img src="assets/brand/github-banner.svg" alt="QuietDrop — Local-first file intake and staging. A Blackfong project." width="1200">
+
+**Local-first file intake and staging.**
+
+![Stage](https://img.shields.io/badge/stage-Local%20MVP-8bd5e8?style=for-the-badge&labelColor=0c1220)
+[![CI](https://img.shields.io/github/actions/workflow/status/5K-bit/QuietDrop/obeos-component-ci.yml?branch=main&style=for-the-badge&label=CI&labelColor=0c1220&color=8bd5e8)](https://github.com/5K-bit/QuietDrop/actions/workflows/obeos-component-ci.yml)
+
+[Install](#install-dev--local) · [Quick start](#quick-start) · [Configuration](#config) · [CLI](#cli-mvp)
+
+</div>
+
+---
+
 # QuietDrop
+
+| Collect | Review | Archive |
+|---|---|---|
+| Watched folders and one-shot scans | Inspect, tag, rename or reject | Move reviewed files into local storage |
 
 Local-first file intake and staging.
 
