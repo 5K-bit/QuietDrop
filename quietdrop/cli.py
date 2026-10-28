@@ -3,6 +3,8 @@ from pathlib import Path
 from typing import Optional
 
 import typer
+
+from .terminal_brand import PRODUCT, product_version, show_banner
 import uvicorn
 from rich.console import Console
 from rich.table import Table
@@ -14,7 +16,7 @@ from .db import add_tags, connect, counts_by_status, get_item, list_items
 from .scanner import scan_once
 from .watcher import run_forever
 
-app = typer.Typer(add_completion=False, help="QuietDrop: local-first file intake + staging.")
+app = typer.Typer(add_completion=False, help="QuietDrop: local-first file intake + staging. By Blackfong.")
 console = Console()
 
 
@@ -115,8 +117,8 @@ def list_cmd(
         con.close()
 
     table = Table(show_header=True, header_style="bold")
-    table.add_column("id", style="cyan", justify="right")
-    table.add_column("status", style="magenta")
+    table.add_column("id", style="#a8c4d8", justify="right")
+    table.add_column("status", style="#a8c4d8")
     table.add_column("filename")
     table.add_column("size", justify="right")
     table.add_column("path")
@@ -239,3 +241,19 @@ def serve(
     app_ = create_app(start_watcher=watch)
     uvicorn.run(app_, host=host, port=port, log_level="info")
 
+
+
+def _show_version(value: bool):
+    if value:
+        typer.echo(f"{PRODUCT} {product_version()}")
+        raise typer.Exit()
+
+
+@app.callback()
+def identity(
+    version: bool = typer.Option(False, "--version", callback=_show_version, is_eager=True, help="Print the installed product version."),
+    banner: bool = typer.Option(False, "--banner", help="Show the product banner on stderr, including in scripts."),
+    no_banner: bool = typer.Option(False, "--no-banner", help="Suppress the interactive startup banner."),
+):
+    if not no_banner:
+        show_banner(force=banner)
