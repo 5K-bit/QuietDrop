@@ -10,6 +10,10 @@ All notable changes to this project are documented here. The format follows
 
 First tagged release. See [docs/releases/v0.1.0.md](docs/releases/v0.1.0.md).
 
+### Fixed
+
+- The source distribution contained only the web templates and static files, so a wheel built from it had no Python modules. The sdist now includes the package, tests and licence.
+
 ### Added
 
 - Release workflow: runs the full CI, checks the tag matches the package version and is on the default branch, builds the wheel and sdist, smoke-tests the wheel in a clean environment, and publishes a prerelease with SHA256SUMS.
