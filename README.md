@@ -168,7 +168,7 @@ QuietDrop is part of the Blackfong portfolio because it shows controlled local a
 
 ## Licence
 
-Apache-2.0. See [LICENSE](LICENSE).
+MIT, as declared in `pyproject.toml`. See [LICENSE](LICENSE).
 
 ## AI assistance
 
